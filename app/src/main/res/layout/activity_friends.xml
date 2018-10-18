@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include
+        android:id="@+id/toolbarFriends"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+        <LinearLayout
+            android:id="@+id/buscarAmigoHeader"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/toolbarFriends"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/buscarAmigo"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+
+                android:background="#66757c87"
+                android:drawableLeft="@drawable/ic_person_black_24dp"
+                android:drawablePadding="10dp"
+                android:ems="10"
+                android:hint="Nombre de usuario"
+                android:inputType="text"
+                android:paddingLeft="10dp"
+                android:textColor="@android:color/background_light" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.2"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:onClick="searchFriends"
+                android:text="Buscar"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buscarAmigoHeader"
+            android:clipToPadding="false"
+            android:id="@+id/recyclerBuscar">
+        </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

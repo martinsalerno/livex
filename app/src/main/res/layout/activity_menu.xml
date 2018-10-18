@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MenuActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarMenu">
+    </include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/menuTicketScan"
+            android:elevation="2dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:onClick="sendToTicketScan"
+            android:textColor="#606060"
+            android:textSize="25sp"
+            android:text="Escanear"
+            android:background="@drawable/button_edge"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="8dp"/>
+
+        <Button
+            android:id="@+id/menuSocial"
+            android:elevation="2dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#606060"
+            android:textSize="23sp"
+            android:layout_height="match_parent"
+            android:onClick="sendToSocial"
+            android:background="@drawable/button_edge"
+            android:text="Feed"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="4dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/menuEvents"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:elevation="2dp"
+            android:textColor="#606060"
+            android:textSize="23sp"
+            android:layout_height="match_parent"
+            android:onClick="sendToShows"
+            android:text="Espectáculos"
+            android:background="@drawable/button_edge"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="8dp"/>
+
+        <Button
+            android:id="@+id/menuFriendConnect"
+            android:layout_width="0dp"
+            android:elevation="15dp"
+            android:layout_weight="1"
+            android:textColor="#606060"
+            android:textSize="23sp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_edge"
+            android:onClick="sendToFriends"
+            android:text="Amigos"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="4dp" />
+    </LinearLayout>
+</LinearLayout>
