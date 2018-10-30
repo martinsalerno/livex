@@ -6,16 +6,9 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:layout_marginBottom="-10dp"
-        android:layout_marginTop="-20dp"
-        android:layout_marginLeft="-9dp"
-        android:layout_marginRight="-9dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardPreventCornerOverlap="false"
-        app:cardElevation="20dp"
-        app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="#FFF"
         app:cardCornerRadius="2dp">
         <FrameLayout
             android:layout_width="match_parent"

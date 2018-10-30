@@ -4,19 +4,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#000">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v4.widget.NestedScrollView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+            <LinearLayout
                 android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +44,7 @@
                             android:id="@+id/eventName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="110dp"
+                            android:layout_marginTop="140dp"
                             android:fontFamily="sans-serif"
                             android:text="Personal fest"
                             android:textAlignment="center"
@@ -79,7 +76,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="100dp"
                             android:orientation="horizontal">
                             <TextView
                                 android:id="@+id/showsNumber"
@@ -94,7 +91,10 @@
                                 android:textSize="26sp"
                                 android:textStyle="bold">
                             </TextView>
-
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="0dp" />
                             <TextView
                                 android:id="@+id/commercesNumber"
                                 android:layout_width="0dp"
@@ -126,6 +126,19 @@
                                 android:textSize="22sp"
                                 android:textStyle="bold">
                             </TextView>
+                            <Button
+                                android:id="@+id/locateCommerces"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/button_border"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginLeft="5dp"
+                                android:text="Localizar"
+                                android:textColor="#FFF" />
                             <TextView
                                 android:id="@+id/comerciosText"
                                 android:layout_width="0dp"
@@ -142,22 +155,23 @@
                         </LinearLayout>
                     </LinearLayout>
                 </FrameLayout>
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#FFF"
-                    android:orientation="vertical"
-                    tools:context=".EventActivity">
+                    android:background="#000"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#DD000000"
+                        android:background="@drawable/event_label_color"
                         android:fontFamily="sans-serif"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="4dp"
                         android:text="FUNCIONES"
+                        android:padding="10dp"
                         android:textAlignment="center"
-                        android:textColor="#b3b3b3"
-                        android:textSize="15sp"
+                        android:textColor="#FFF"
+                        android:textSize="19sp"
                         android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
@@ -172,27 +186,67 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#DD000000"
+                        android:background="@drawable/event_label_color"
                         android:fontFamily="sans-serif"
                         android:text="COMERCIOS"
+                        android:padding="10dp"
+                        android:layout_marginTop="-2dp"
+                        android:layout_marginBottom="2dp"
                         android:textAlignment="center"
-                        android:textColor="#000"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFF"
+                        android:textSize="19sp"
+                        android:textStyle="bold"  />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerComercios"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/event_label_color"
+                        android:fontFamily="sans-serif"
+                        android:text="PUBLICACIONES"
+                        android:padding="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textAlignment="center"
+                        android:textColor="#FFF"
+                        android:textSize="19sp"
+                        android:textStyle="bold"  />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:background="#000">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerCompletePostsEvent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:nestedScrollingEnabled="false"
+                            android:fillViewport="true"
+                            android:clipToPadding="false">
+                        </android.support.v7.widget.RecyclerView>
+                        <ProgressBar
+                            android:id="@+id/loadingPostsEvent"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="10dp"
+                            android:alpha="1"
+                            android:indeterminateTint="#FFF"
+                            android:translationZ="2dp" />
+                    </FrameLayout>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
         <include
-                android:id="@+id/toolbarEvent"
-                layout="@layout/toolbar_hollow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            android:id="@+id/toolbarEvent"
+            layout="@layout/toolbar_hollow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
     </FrameLayout>
 </LinearLayout>

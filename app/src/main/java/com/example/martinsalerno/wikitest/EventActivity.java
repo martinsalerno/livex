@@ -1,7 +1,10 @@
 package com.example.martinsalerno.wikitest;
 
-import android.app.Activity;
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,41 +15,52 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.martinsalerno.wikitest.adapters.CompletePostAdapter;
+import com.example.martinsalerno.wikitest.classes.Post;
+import com.example.martinsalerno.wikitest.interfaces.PostsFragmentInterface;
 import com.google.gson.Gson;
 
 import java.util.List;
 
-import adapters.CommerceAdapter;
-import adapters.ShowAdapter;
-import classes.Commerce;
-import classes.Event;
-import classes.Place;
-import classes.RequestHandler;
-import classes.SessionHandler;
-import classes.Show;
+import com.example.martinsalerno.wikitest.adapters.CommerceAdapter;
+import com.example.martinsalerno.wikitest.adapters.ShowAdapter;
+import com.example.martinsalerno.wikitest.classes.Commerce;
+import com.example.martinsalerno.wikitest.classes.Event;
+import com.example.martinsalerno.wikitest.classes.Place;
+import com.example.martinsalerno.wikitest.classes.RequestHandler;
+import com.example.martinsalerno.wikitest.classes.SessionHandler;
+import com.example.martinsalerno.wikitest.classes.Show;
+
+import org.json.JSONArray;
 
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements PostsFragmentInterface {
     Toolbar toolbar;
     private Event event;
     private ImageView eventImg;
     private RecyclerView recyclerShows;
     private RecyclerView recyclerCommerces;
+    private RecyclerView recyclerPosts;
+    private ProgressBar progressBar;
     private TextView placeName;
     private TextView placeAddress;
     private TextView showsNumber;
     private TextView commerceNumber;
+    private Button buttonLocate;
     //private TextView placeCapacity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        toolbar = (Toolbar) findViewById(R.id.toolbarEvent);
+        toolbar = findViewById(R.id.toolbarEvent);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
@@ -56,12 +70,25 @@ public class EventActivity extends AppCompatActivity {
         commerceNumber = findViewById(R.id.commercesNumber);
         placeName = findViewById(R.id.placeName);
         placeAddress = findViewById(R.id.placeAddress);
+        buttonLocate = findViewById(R.id.locateCommerces);
+        buttonLocate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startLocation();
+            }
+        });
+        recyclerPosts = findViewById(R.id.recyclerCompletePostsEvent);
+        recyclerPosts.setVisibility(View.INVISIBLE);
+        recyclerPosts.setHasFixedSize(true);
+        recyclerPosts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        progressBar = findViewById(R.id.loadingPostsEvent);
 
         recyclerShows = findViewById(R.id.recyclerShows);
         recyclerShows.setLayoutManager(new GridLayoutManager(this, 2));
 
         recyclerCommerces = findViewById(R.id.recyclerComercios);
         recyclerCommerces.setLayoutManager(new GridLayoutManager(this, 2));
+        loadPosts();
         loadEvent();
     }
 
@@ -75,7 +102,7 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void loadEventImg(){
-        new RequestHandler().loadEventImage(this, eventImg, event.getId());
+        new RequestHandler().loadEventImageSync(this, eventImg, event.getId());
     }
 
     public void loadPlace(){
@@ -103,33 +130,47 @@ public class EventActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void loadPosts() {
+        new RequestHandler().loadPosts(this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.profile:
-                sendToProfile();
-                break;
-            case R.id.logout:
-                sendToLogin();
-                break;
+    public void assignPosts(Post[] posts) {
+        showRecycler();
+        CompletePostAdapter adapter = new CompletePostAdapter(posts, this);
+        recyclerPosts.setAdapter(adapter);
+    }
+
+    @Override
+    public void showRecycler() {
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerPosts.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    public void startLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void sendToProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
+        Gson gson = new Gson();
+        String comerciosJson = gson.toJson(event.getComercios());
+        intent.putExtra("comercios", comerciosJson);
         startActivity(intent);
     }
 
-    public void sendToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        new SessionHandler(this).logOut();
-        startActivity(intent);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, MapActivity.class);
+            Gson gson = new Gson();
+            String comerciosJson = gson.toJson(event.getComercios());
+            intent.putExtra("comercios", comerciosJson);
+            startActivity(intent);
+        }
     }
 }

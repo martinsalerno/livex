@@ -1,17 +1,10 @@
 package com.example.martinsalerno.wikitest;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.wikitude.architect.ArchitectStartupConfiguration;
 import com.wikitude.architect.ArchitectView;
@@ -19,7 +12,7 @@ import com.wikitude.architect.ArchitectView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import classes.LocationProvider;
+import com.example.martinsalerno.wikitest.location.LocationProvider;
 
 public class MainActivity extends AppCompatActivity {
     private LocationProvider locationProvider;
@@ -38,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 if (location != null && MainActivity.this.architectView != null ) {
-                    // check if location has altitude at certain accuracy level & call right architect method (the one with altitude information)
                     if (location.hasAltitude() && location.hasAccuracy() && location.getAccuracy()<7) {
                         MainActivity.this.architectView.setLocation( location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy() );
                     } else {

@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.example.martinsalerno.wikitest.fragments.ScanFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_scan"
+            android:tint="#11FFFFFF"
+            android:scaleType="centerCrop" />
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"/>
+        <Button
+            android:id="@+id/scanButton"
+            android:layout_width="240dp"
+            android:layout_height="400dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Escanea"
+            android:textSize="25sp"
+            android:textColor="#fff"
+            android:background="@drawable/scan_button_edge"
+            android:padding="10dp"/>
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"/>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,91 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/postPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:src="@drawable/background_profile_6"/>
+
+            <ProgressBar
+                android:id="@+id/loadingPost"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="80dp"
+                android:alpha="1"
+                android:indeterminateTint="#FFF"
+                android:translationZ="2dp" />
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/postTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/event_label_color"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="ESPECTÁCULO"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"/>
+        <Spinner
+            android:id="@+id/dropDownEvents"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="#000"/>
+
+        <EditText
+            android:id="@+id/postDescription"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="top"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#FFF"
+            android:textColorHint="@drawable/edit_text_selector"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:hint="Descripción" />
+
+        <Button
+            android:id="@+id/postCommit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_border"
+            android:textColor="#FFF"
+            android:text="Publicar"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarPost"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColorPrimary="#FFF">
+        </android.support.v7.widget.Toolbar>
+    </FrameLayout>
+</ScrollView>

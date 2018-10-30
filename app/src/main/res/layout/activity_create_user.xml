@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:background="@drawable/background_color">
+
+            <LinearLayout
+                android:gravity="bottom"
+                android:layout_gravity="bottom"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Creá tu usuario"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:paddingStart="15dp"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/createUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="#66BBBBBB"
+                    android:drawableLeft="@drawable/ic_person_black_24dp"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:hint="Usuario"
+                    android:inputType="text"
+                    android:paddingLeft="10dp"
+                    android:textColor="#FFF"
+                    android:textColorHint="@drawable/edit_text_selector"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:drawableTint="#FFF"/>
+
+                <EditText
+                    android:id="@+id/createPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="15dp"
+                    android:background="#66BBBBBB"
+                    android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:textColor="#FFF"
+                    android:textColorHint="@drawable/edit_text_selector"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:drawableTint="#FFF"/>
+
+                <EditText
+                    android:id="@+id/createPasswordConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="15dp"
+                    android:background="#66BBBBBB"
+                    android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:hint="Confirmar contraseña"
+                    android:inputType="textPassword"
+                    android:paddingLeft="10dp"
+                    android:textColor="#FFF"
+                    android:textColorHint="@drawable/edit_text_selector"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:drawableTint="#FFF"/>
+
+                <Button
+                    android:id="@+id/createUserButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="15dp"
+                    android:layout_marginStart="0dp"
+                    android:gravity="center"
+                    android:text="CREAR USUARIO"
+                    android:padding="20dp"
+                    android:textColor="#FFF"
+                    android:background="@drawable/button_border"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+        <include
+            android:id="@+id/toolbarCreateUser"
+            layout="@layout/toolbar_hollow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ProgressBar
+            android:id="@+id/createLoadingSpinner"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:indeterminateTint="#FFF" />
+    </FrameLayout>
+
+</RelativeLayout>

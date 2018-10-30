@@ -41,7 +41,7 @@
                 android:layout_height="187dp"
                 android:layout_marginTop="50dp"
                 android:src="@drawable/personal_fest_button_img"
-                app:civ_border_color="@color/colorAccent"
+                app:civ_border_color="#000"
                 android:layout_gravity="center_horizontal"
                 app:civ_border_width="6dp" />
 

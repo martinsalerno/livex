@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="#FFF"
-    android:textColorPrimary="#000"
+    android:background="@color/colorPrimaryDark"
+    android:textColorPrimary="#FFF"
     app:popupTheme="@style/CustomPopOut">
     <TextView
         android:id="@+id/toolbar_title"
@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:text="Toolbar Title"
         android:layout_gravity="center"
-        android:textColor="#000"
+        android:textColor="#FFF"
         android:textSize="20sp"/>
 </android.support.v7.widget.Toolbar>
