@@ -45,7 +45,8 @@
             android:name=".MainActivity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".MenuActivity" />
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action
@@ -57,12 +58,9 @@
         </activity>
         <activity android:name=".MenuActivity" />
         <activity
-            android:name=".ProfileActivity"
-            android:parentActivityName=".MenuActivity" />
-        <activity
             android:name=".EventActivity"
             android:hardwareAccelerated="true"
-            android:parentActivityName=".BottomNavigationActivity"/>
+            android:parentActivityName=".BottomNavigationActivity" />
 
         <service
             android:name=".location.LocationIntentService"
@@ -96,9 +94,10 @@
             android:label="@string/title_activity_find_friend"
             android:theme="@style/AppTheme" />
         <activity android:name=".MapActivity" />
-        <activity android:name=".CreateUserActivity"
+        <activity
+            android:name=".CreateUserActivity"
             android:parentActivityName=".LoginActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

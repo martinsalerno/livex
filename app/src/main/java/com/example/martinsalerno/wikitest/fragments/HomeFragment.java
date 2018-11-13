@@ -33,6 +33,7 @@ import com.example.martinsalerno.wikitest.adapters.CompletePostAdapter;
 import com.example.martinsalerno.wikitest.adapters.FriendAdapter;
 import com.example.martinsalerno.wikitest.classes.Post;
 import com.example.martinsalerno.wikitest.classes.RequestHandler;
+import com.example.martinsalerno.wikitest.classes.SessionHandler;
 import com.example.martinsalerno.wikitest.interfaces.PostsFragmentInterface;
 
 import java.io.File;
@@ -51,6 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Post
     private Toolbar toolbar;
     private String currentImagePath;
     private Uri photoURI;
+    private TextView missingPost;
     OvershootInterpolator interpolator = new OvershootInterpolator();
 
     public HomeFragment() {
@@ -69,6 +71,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Post
         recyclerPosts.setVisibility(View.INVISIBLE);
         recyclerPosts.setHasFixedSize(true);
         recyclerPosts.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        missingPost = view.findViewById(R.id.missingPosts);
+        missingPost.setVisibility(View.INVISIBLE);
         initFabs(view);
         toolbar = view.findViewById(R.id.toolbarHome);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -100,10 +104,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Post
     }
 
     public void loadPosts() {
-       new RequestHandler().loadPosts(this);
+        String path = "usuarios/" + new SessionHandler(getContext()).getId() + "/feed";
+       new RequestHandler().loadPosts(path, this);
     }
 
     public void assignPosts(Post[] posts) {
+        if (posts.length == 0) {
+            missingPost.setVisibility(View.VISIBLE);
+        }
         showRecycler();
         CompletePostAdapter adapter = new CompletePostAdapter(posts, this);
         recyclerPosts.setAdapter(adapter);

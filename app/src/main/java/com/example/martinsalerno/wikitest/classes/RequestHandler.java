@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.se.omapi.Session;
+import android.support.design.bottomappbar.BottomAppBarTopEdgeTreatment;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.martinsalerno.wikitest.BottomNavigationActivity;
 import com.example.martinsalerno.wikitest.CreateUserActivity;
 import com.example.martinsalerno.wikitest.LoginActivity;
 import com.example.martinsalerno.wikitest.PostActivity;
@@ -120,9 +123,36 @@ public class RequestHandler {
         LivexExchange.getInstance(fragment.getContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void loadEventsFromPost(final PostActivity activity) {
+    public void loadEventsProfile(final ProfileFragment fragment) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                (com.android.volley.Request.Method.GET, EVENTS_URL, null, new Response.Listener<JSONArray>() {
+                (Request.Method.GET, EVENTS_URL, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Event[] eventos = mapper.fromJson(response.toString(), Event[].class);
+                        fragment.setEvents(eventos);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("mapper not ok", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + new SessionHandler(fragment.getContext()).getToken());
+                return headers;
+
+            }
+        };
+
+        LivexExchange.getInstance(fragment.getContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void loadEventsFromPost(final PostActivity activity) {
+        String path = USERS_URL + new SessionHandler(activity).getId() + "/espectaculos";
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                (com.android.volley.Request.Method.GET, path, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Event[] eventos = mapper.fromJson(response.toString(), Event[].class);
@@ -146,9 +176,34 @@ public class RequestHandler {
         LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void loadPosts(final PostsFragmentInterface fragment) {
+    public void addEvent(final Activity activity, String eventId) {
+        String path = USERS_URL + new SessionHandler(activity).getId() + "/espectaculos/" + eventId;
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                (Request.Method.GET, POSTS_URL, null, new Response.Listener<JSONArray>() {
+                (com.android.volley.Request.Method.POST, path, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("mapper not ok", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + new SessionHandler(activity).getToken());
+                return headers;
+
+            }
+        };
+
+        LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void loadPosts(String partialPath, final PostsFragmentInterface fragment) {
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                (Request.Method.GET,  BASE_URL + partialPath, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         System.out.println(response.toString());
@@ -256,34 +311,32 @@ public class RequestHandler {
         LivexExchange.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
-    public JSONObject getLocation(final Context context, String userId) {
-        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+    public void getLocation(final BottomNavigationActivity activity, final String userId, final String username) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (USERS_URL + userId + "/posicion", new JSONObject(), future, future) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+                (com.android.volley.Request.Method.GET, USERS_URL + userId + "/posicion", null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Position position = mapper.fromJson(response.toString(), Position.class);
+                        Log.d("ENTRE A LOCATION", response.toString());
+                        activity.setFriendPosition(position, userId, username);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ENTRE A LOCATION error", error.toString());
+                        activity.setFriendPositionNotOk();
+                    }
+                }) {
+             @Override
+             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Bearer " + new SessionHandler(context).getToken());
+                headers.put("Authorization", "Bearer " + new SessionHandler(activity).getToken());
                 return headers;
 
             }
         };
-
-        LivexExchange.getInstance(context).addToRequestQueue(jsonObjectRequest);
-        try {
-            JSONObject response = future.get(100, TimeUnit.SECONDS);
-            System.out.println(response.toString());
-            return response;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Log.d("Strirtirrt", jsonObjectRequest.toString());
+        LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
     }
 
 
@@ -349,7 +402,7 @@ public class RequestHandler {
                 .build());
         RequestOptions myOptions = new RequestOptions()
                 .centerCrop()
-                .override(70, 80);
+                .override(70, 80).placeholder(R.drawable.background_profile_1);
         try {
             return Glide.with(activity).asBitmap().load(glideUrl).apply(myOptions).submit(70, 80).get();
         } catch (InterruptedException e) {
@@ -408,7 +461,7 @@ public class RequestHandler {
 
     public void addFriend(final Context context, String userId) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, USERS_URL + new SessionHandler(context).getUsername() + "/friends/" + userId, null, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, USERS_URL + new SessionHandler(context).getId() + "/friends/" + userId, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                     }

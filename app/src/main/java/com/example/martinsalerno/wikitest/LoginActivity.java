@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.example.martinsalerno.wikitest.classes.RequestHandler;
 import com.example.martinsalerno.wikitest.classes.SessionHandler;
+import com.example.martinsalerno.wikitest.location.LocationIntentService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,15 +67,20 @@ public class LoginActivity extends AppCompatActivity {
         loadingSpinner.setVisibility(View.INVISIBLE);
         showToast("Bienvenido " + userTextEdit.getText().toString());
         saveSession(username, response);
+        startLocation();
         sendToMenu();
     }
 
     public void loginFailed() {
         loadingSpinner.setVisibility(View.INVISIBLE);
         showToast("Usuario o contraseña incorrectos");
-        sendToMenu();
     }
 
+    private void startLocation() {
+        Intent intent = new Intent(this, LocationIntentService.class);
+        intent.putExtra("userId", new SessionHandler(this).getId());
+        startService(intent);
+    }
 
     public void saveSession(String username, JSONObject response) {
         SessionHandler session = new SessionHandler(this);
@@ -106,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, 1);
-
         }
     }
 

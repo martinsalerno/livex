@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/popOutTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TITULO"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#FFF"/>
+
+            <TextView
+                android:id="@+id/popOutSubTittle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Algunas de sus canciones"
+                android:paddingStart="10dp"
+                android:layout_marginBottom="4dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#BBB"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_height="2dp"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/popOutButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:layout_gravity="center|right"
+            android:gravity="center"
+            android:text="X"
+            android:layout_marginRight="10dp"
+            android:textColor="#FFF"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/popOutRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:padding="10dp">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

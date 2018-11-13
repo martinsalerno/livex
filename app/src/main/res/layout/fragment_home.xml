@@ -44,6 +44,17 @@
             android:alpha="1"
             android:indeterminateTint="#FFF"
             android:translationZ="2dp" />
+        <TextView
+            android:id="@+id/missingPosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:textColor="#FFF"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="Agrega amigos para ver sus publicaciones"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

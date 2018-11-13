@@ -25,18 +25,18 @@ public class FindFriendActivity extends AppCompatActivity {
     private LocationProvider locationProvider;
     private LocationTracker tracker;
     private ArchitectView architectView;
-    private Friend friend;
+    private String friend;
     private Position position;
-    private final String TAG = "MAP_ACTIVITY";
+    private final String TAG = "FIND_FRIEND_ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Gson gson = new Gson();
-        Log.d(TAG, getIntent().getStringExtra("comercios"));
-        friend = gson.fromJson(getIntent().getStringExtra("friend"), Friend.class);
+        friend = getIntent().getStringExtra("friend");
         position = gson.fromJson(getIntent().getStringExtra("position"), Position.class);
+        Log.d("STRINGGGGG", position.toString());
         this.architectView = (ArchitectView)this.findViewById(R.id.architectView);
         final ArchitectStartupConfiguration config = new ArchitectStartupConfiguration();
         config.setLicenseKey("TsTbN1sQuxf7XTEJWq+KxgA4pdjpgd3Dgi2i9mZqzOFYn/AazPuogfgDRz6w+X9LaPAzMErVGBhH2fDUbobGH8Tf/pGGFuE8eEsUcAnXhTY2fB0OOWWA8WfgExrKeMwVSZYcqkyrdR/JfxS/T6ddwZ02gzCgxWOt1b+KWbpNoIFTYWx0ZWRfX9F26p8J9zHwTK5iZCOTM6gAGHwIeJwKOffVR5b8V3y+EuieFBogW5fwNl9EDAz6aVI+YkGfcuI5Vnr0ZQWXlsblMVRrOsyx9n7mf+XMHPkk6dHgNhdZPK+4+G7sTd/UMVNl0U3hZGejzUGXTtzG44vHa5VOjT3v/Crmwn5StAEsIRpvuFfHu7ugtyTKBLu053NcBTZVh4SvCPR/kpqkf1xQUX9ePVI5at8y3jN3RBVAKPTq2UIgxhMmmqHty+zZjT7BPqSHMd3NSUFO6SDdA5ddSyZUQkoJsnLeBw5lktOd0WnwJaGKXM1CFvuBXqzw4njK8LjiEul6EFw1MVY+0Hfc2OOuCDeGp3e5NR7mccu+SJhfEDwepOhRdXd7q98B0VoCYnxu4ob52wA1X15LGAWjMCwLcipQ1TPcoY5wktC+3vrGYjv5lb4lEZv2Fl7oaODUVlK3AkqCs/wXPHg7mWy3FTDq+2VqKf2GIWXfu1y8qwkUq7Mb3wwXQYR5WQpz67fzrVttUqG0MHimgIeweaAx058UXaf3iWUhblF8lfMir8mgum+9E3SpYkiBDhEljWs5efrckeXz3vA6P6C/nManXib6BMaZ/w==");
@@ -63,21 +63,20 @@ public class FindFriendActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         architectView.onPostCreate();
         try {
-            this.architectView.load( "file:///android_asset/demo5/index.html" );
+            this.architectView.load( "file:///android_asset/demo6/index.html" );
 
         } catch(Exception e) {
             Log.d(TAG, e.toString());
         }
 
         JSONArray array = new JSONArray();
-        Log.d(TAG, friend.getUsername());
         JSONObject poi = new JSONObject();
         try {
-            poi.put("id", friend.getId());
+            poi.put("id", 1);
             poi.put("longitude", position.getLongitud());
             poi.put("latitude", position.getLatitud());
-            poi.put("description", friend.getUsername());
-            poi.put("name", friend.getUsername());
+            poi.put("description", "Amigo: " + friend);
+            poi.put("name", "Amigo: " + friend);
         } catch (JSONException e) {
                 e.printStackTrace();
         }

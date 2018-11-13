@@ -54,7 +54,7 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
     private TextView showsNumber;
     private TextView commerceNumber;
     private Button buttonLocate;
-    //private TextView placeCapacity;
+    private Button buttonTickets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +88,8 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
 
         recyclerCommerces = findViewById(R.id.recyclerComercios);
         recyclerCommerces.setLayoutManager(new GridLayoutManager(this, 2));
-        loadPosts();
         loadEvent();
+        loadPosts();
     }
 
     public void loadEvent(){
@@ -131,7 +131,8 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
 
     @Override
     public void loadPosts() {
-        new RequestHandler().loadPosts(this);
+        String path = "publicaciones/evento/" + event.getId();
+        new RequestHandler().loadPosts(path,this);
     }
 
     @Override

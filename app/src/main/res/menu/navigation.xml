@@ -5,7 +5,7 @@
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:enabled="true"
-        android:title="Home" />
+        android:title="Feed" />
 
     <item
         android:id="@+id/navigation_shows"
@@ -23,7 +23,7 @@
         android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_search_black_24dp"
         android:enabled="true"
-        android:title="Buscar" />
+        android:title="Amigues" />
 
     <item
         android:id="@+id/navigation_profile"

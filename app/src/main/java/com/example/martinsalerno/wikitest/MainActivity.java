@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.martinsalerno.wikitest.classes.RequestHandler;
 import com.wikitude.architect.ArchitectStartupConfiguration;
 import com.wikitude.architect.ArchitectView;
 
@@ -89,5 +90,18 @@ public class MainActivity extends AppCompatActivity {
         architectView.onPause();
         locationProvider.onPause();
 
+    }
+
+    public void onJSONObjectReceived(JSONObject jsonObject) {
+        Log.d("ENTRE A JSON BOJECT", jsonObject.toString());
+        try {
+            switch (jsonObject.getString("name")) {
+                case "entradaScanned":
+                    new RequestHandler().addEvent(this, jsonObject.getString("id"));
+                    break;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "onJSONObjectReceived: ", e);
+        }
     }
 }

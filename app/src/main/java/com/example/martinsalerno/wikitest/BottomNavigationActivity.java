@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.martinsalerno.wikitest.classes.Position;
 import com.example.martinsalerno.wikitest.fragments.EventsFragment;
 import com.example.martinsalerno.wikitest.fragments.FriendsFragment;
 import com.example.martinsalerno.wikitest.fragments.HomeFragment;
 import com.example.martinsalerno.wikitest.fragments.ProfileFragment;
 import com.example.martinsalerno.wikitest.fragments.ScanFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -143,5 +146,20 @@ public class BottomNavigationActivity extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+
+    public void setFriendPosition(Position position, String userId, String username) {
+        Toast.makeText(this, "Iniciando localización", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, FindFriendActivity.class);
+        Gson gson = new Gson();
+        String positionJSON = gson.toJson(position);
+        intent.putExtra("position", positionJSON);
+        intent.putExtra("friend", username);
+        startActivity(intent);
+
+    }
+
+    public void setFriendPositionNotOk() {
+        Toast.makeText(this, "No se pudo obtener la ubicación del usuario", Toast.LENGTH_SHORT).show();
     }
 }

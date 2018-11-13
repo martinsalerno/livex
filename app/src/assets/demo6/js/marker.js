@@ -73,27 +73,6 @@ function Marker(poiData) {
         verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
     });
 
-           this.radarCircle = new AR.Circle(0.03, {
-                horizontalAnchor: AR.CONST.HORIZONTAL_ANCHOR.CENTER,
-                opacity: 0.8,
-                style: {
-                    fillColor: "#ffffff"
-                }
-            });
-            this.radardrawables = [];
-            this.radardrawables.push(this.radarCircle);
-            this.radarCircleSelected = new AR.Circle(0.05, {
-                   horizontalAnchor: AR.CONST.HORIZONTAL_ANCHOR.CENTER,
-                   opacity: 0.8,
-                   style: {
-                       fillColor: "#0066ff"
-                   }
-               });
-
-            this.radardrawablesSelected = [];
-            this.radardrawablesSelected.push(this.radarCircleSelected);
-
-
     /*
         Create the AR.GeoObject with the drawable objects and define the AR.ImageDrawable as an indicator target on the marker AR.GeoObject.
         The direction indicator is displayed automatically when necessary. AR.Drawable subclasses (e.g. AR.Circle) can be used as direction indicators.
@@ -101,8 +80,7 @@ function Marker(poiData) {
     this.markerObject = new AR.GeoObject(markerLocation, {
         drawables: {
             cam: [this.markerDrawable_idle, this.markerDrawable_selected, this.titleLabel, this.descriptionLabel],
-            indicator: this.directionIndicatorDrawable,
-            radar: this.radardrawables
+            indicator: this.directionIndicatorDrawable
         }
     });
 

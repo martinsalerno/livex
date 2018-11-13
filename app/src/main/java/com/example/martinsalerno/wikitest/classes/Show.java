@@ -1,6 +1,7 @@
 package com.example.martinsalerno.wikitest.classes;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Show {
     private String id;
@@ -29,6 +30,8 @@ public class Show {
     {
         return new SimpleDateFormat("dd/MM/yyyy").format(fecha).toString();
     }
+
+    public Date getDate() { return new Date(fecha); }
 
     public String getSetList() {
         return setList.replaceAll("\n", ", ");

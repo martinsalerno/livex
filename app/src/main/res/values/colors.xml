@@ -8,4 +8,7 @@
     <color name="colorLightGrey">#3C3C3C</color>
     <color name="colorBottom">#111</color>
     <color name="colorButtomDisabled">#44FFFFFF</color>
+    <color name="colorTintEvent">#33000000</color>
+    <color name="colorPresenceGreen">#905fcf80</color>
+    <color name="colorPresencerED">#90d10202</color>
 </resources>

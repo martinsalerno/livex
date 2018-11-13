@@ -22,4 +22,8 @@ class CommerceItem {
     public Integer getStock() {
         return this.stock;
     }
+
+    public String getDescription() {
+        return getNombre() + "   $ " + Integer.toString(getPrecio());
+    }
 }

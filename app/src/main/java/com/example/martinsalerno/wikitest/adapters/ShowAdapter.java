@@ -3,15 +3,21 @@ package com.example.martinsalerno.wikitest.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.martinsalerno.wikitest.R;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.example.martinsalerno.wikitest.classes.RequestHandler;
@@ -48,30 +54,56 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolderFunc
         TextView functionName;
         TextView functionDate;
         ImageView functionImage;
-        //TextView functionList;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Integer width = LinearLayout.LayoutParams.MATCH_PARENT;
+        Integer height =  LinearLayout.LayoutParams.WRAP_CONTENT;
+        final static String SOME_SONGS = "Algunas de sus canciones";
 
         public ViewHolderFunction(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            this.functionName = (TextView) itemView.findViewById(R.id.showName);
-            this.functionDate = (TextView) itemView.findViewById(R.id.showDate);
-            this.functionImage = (ImageView) itemView.findViewById(R.id.showImage);
-            //this.functionList = (TextView) itemView.findViewById(R.id.showTracklist);
+            this.functionName =  itemView.findViewById(R.id.showName);
+            this.functionDate =  itemView.findViewById(R.id.showDate);
+            this.functionImage =  itemView.findViewById(R.id.showImage);
 
         }
 
         public void assignShow(Show show) {
             functionName.setText(show.getArtista());
-            functionDate.setText(show.getFecha().toString());
+            functionDate.setText(show.getFecha());
             new RequestHandler().loadImageFromRef((Activity) context, functionImage, show.getImagenRef());
-            //functionList.setText(show.getSetList());
         }
 
         @Override
         public void onClick(final View view) {
             Show show = shows.get(getAdapterPosition());
-            Toast.makeText(context, show.getArtista(), Toast.LENGTH_LONG).show();
+            final View popupView = inflater.inflate(R.layout.pop_out, null);
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+            popupWindow.setAnimationStyle(R.style.popOutAnimation);
+            TextView popoutTittle = popupView.findViewById(R.id.popOutTitle);
+            popoutTittle.setText(show.getArtista());
+            TextView popoutSubTittle =  popupView.findViewById(R.id.popOutSubTittle);
+            popoutSubTittle.setText(SOME_SONGS);
+            popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+            Button button = popupView.findViewById(R.id.popOutButton);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                }
+            });
+            List<String> strings = Arrays.asList(show.getSetList().split(","));
+            ItemAdapter adapter = new ItemAdapter(strings);
+            RecyclerView recycler = popupView.findViewById(R.id.popOutRecycler);
+            recycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            recycler.setHasFixedSize(true);
+            recycler.setAdapter(adapter);
+            popupView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return false;
+                }
+            });
         }
-
     }
 }

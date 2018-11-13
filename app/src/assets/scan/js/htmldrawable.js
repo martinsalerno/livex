@@ -116,7 +116,7 @@ var World = {
 
         this.pageOne = new AR.ImageTrackable(this.tracker, "livex_senior_anillos", {
             drawables: {
-                cam: [buyTicketsButton, video, slideshow]
+                cam: [buyTicketsButton, video, slideshow],
             },
                 onImageRecognized: function onImageRecognizedFn() {
                     if (this.hasVideoStarted) {
@@ -143,6 +143,11 @@ var World = {
                 onImageRecognized: function onImageRecognizedFn() {
                     if (this.hasVideoStarted) {
                         this.drawables.cam[1].resume();
+                        var markerSelectedJSON = {
+                           name: "entradaScanned",
+                           id: "5b9ae620c399fb6a8e4eaade"
+                        };
+                        AR.platform.sendJSONObject(markerSelectedJSON);
                     }
                     else {
                         this.hasVideoStarted = true;

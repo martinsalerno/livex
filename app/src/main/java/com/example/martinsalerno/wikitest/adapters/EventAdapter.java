@@ -3,7 +3,11 @@ package com.example.martinsalerno.wikitest.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,18 +66,39 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
     public class ViewHolderEvent extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView eventName;
+        TextView eventDate;
+        TextView eventPresence;
+        TextView eventArtists;
+        TextView eventCommerces;
         ImageView eventImg;
+
         public ViewHolderEvent(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             eventName = itemView.findViewById(R.id.eventListName);
             eventImg = itemView.findViewById(R.id.eventListImg);
+            eventDate = itemView.findViewById(R.id.eventDateList);
+            eventPresence = itemView.findViewById(R.id.eventPresenceList);
+            eventArtists = itemView.findViewById(R.id.eventArtistsList);
+            eventCommerces = itemView.findViewById(R.id.eventCommercesList);
         }
 
         public void assignEvents(Event event) {
             eventName.setText(event.getNombre());
+            eventDate.setText(event.getDateRange());
+            eventPresence.setText(event.getIsGoingTo());
+            if (event.getHasBeenTo()) {
+                eventPresence.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done_black_24dp, 0, 0, 0);
+                eventPresence.setTextColor(context.getResources().getColor(R.color.colorPresenceGreen));
+                setTextViewDrawableColor(eventPresence, R.color.colorPresenceGreen);
+            } else {
+                eventPresence.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_close_black_24dp, 0, 0, 0);
+                eventPresence.setTextColor(context.getResources().getColor(R.color.colorPresencerED));
+                setTextViewDrawableColor(eventPresence, R.color.colorPresencerED);
+            }
+            eventArtists.setText(Integer.toString(event.getFunciones().size()) + " artistas");
+            eventCommerces.setText(Integer.toString(event.getComercios().size()) + " comercios");
             new RequestHandler().loadEventImageSync(context, eventImg, event.getId());
-            //new LoadEventTask(context, itemView).execute(event.getId(), event.getNombre());
         }
 
         @Override
@@ -86,5 +111,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
             context.startActivity(intent);
         }
 
+        private void setTextViewDrawableColor(TextView textView, int color) {
+            for (Drawable drawable : textView.getCompoundDrawables()) {
+                if (drawable != null) {
+                    drawable.setColorFilter(new PorterDuffColorFilter(context.getColor(color), PorterDuff.Mode.SRC_IN));
+                }
+            }
+        }
     }
 }

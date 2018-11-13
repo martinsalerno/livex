@@ -1,6 +1,8 @@
 package com.example.martinsalerno.wikitest.classes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Commerce {
     private String nombre;
@@ -27,5 +29,13 @@ public class Commerce {
 
     public Position getPosicion() {
         return this.posicion;
+    }
+
+    public List<String> getFormattedItems() {
+        List <String> items = new ArrayList<>();
+        for (CommerceItem item : getProductos()) {
+            items.add(item.getDescription());
+        }
+        return items;
     }
 }

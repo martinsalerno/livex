@@ -67,8 +67,6 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void sendToProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
     }
 
     public void sendToLogin() {

@@ -74,7 +74,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
     public void userCreated() {
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(this, "El usuario se creó correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "El usuario se creó correctamente", Toast.LENGTH_LONG).show();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
