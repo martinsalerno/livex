@@ -178,7 +178,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Post
                 intent.putExtra("imageUri", picUri.toString());
                 startActivity(intent);
             }
-
         }
     }
 

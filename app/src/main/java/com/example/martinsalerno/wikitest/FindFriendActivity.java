@@ -44,12 +44,16 @@ public class FindFriendActivity extends AppCompatActivity {
         tracker = new LocationTracker(this) {
             @Override
             public void onLocationChanged(Location location) {
-                if (location != null && FindFriendActivity.this.architectView != null ) {
-                    if (location.hasAltitude() && location.hasAccuracy() && location.getAccuracy()<7) {
-                        FindFriendActivity.this.architectView.setLocation( location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy() );
-                    } else {
-                        FindFriendActivity.this.architectView.setLocation( location.getLatitude(), location.getLongitude(), location.hasAccuracy() ? location.getAccuracy() : 1000 );
+                try {
+                    if (location != null && FindFriendActivity.this.architectView != null) {
+                        if (location.hasAltitude() && location.hasAccuracy() && location.getAccuracy() < 7) {
+                            FindFriendActivity.this.architectView.setLocation(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
+                        } else {
+                            FindFriendActivity.this.architectView.setLocation(location.getLatitude(), location.getLongitude(), location.hasAccuracy() ? location.getAccuracy() : 1000);
+                        }
                     }
+                } catch (Exception e){
+
                 }
             }
             @Override public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -73,10 +77,10 @@ public class FindFriendActivity extends AppCompatActivity {
         JSONObject poi = new JSONObject();
         try {
             poi.put("id", 1);
-            poi.put("longitude", position.getLongitud());
-            poi.put("latitude", position.getLatitud());
-            poi.put("description", "Amigo: " + friend);
-            poi.put("name", "Amigo: " + friend);
+            poi.put("longitude", position.getLatitud());
+            poi.put("latitude", position.getLongitud());
+            poi.put("description", "Amigo");
+            poi.put("name",  friend);
         } catch (JSONException e) {
                 e.printStackTrace();
         }
@@ -96,6 +100,7 @@ public class FindFriendActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         architectView.onDestroy();
+        tracker.onDestroy();
     }
 
     @Override
@@ -103,5 +108,11 @@ public class FindFriendActivity extends AppCompatActivity {
         super.onPause();
         architectView.onPause();
         tracker.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 }

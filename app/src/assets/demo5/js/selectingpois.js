@@ -17,7 +17,6 @@ var World = {
 		World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
 		World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
 
-
 		for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
 			var singlePoi = {
 				"id": poiData[currentPlaceNr].id,
@@ -34,7 +33,7 @@ var World = {
 			*/
 			World.markerList.push(new Marker(singlePoi));
 		}
-
+        PoiRadar.show();
 		World.updateStatusMessage("Cantidad de comercios: " + poiData.length);
 	},
 
@@ -113,7 +112,7 @@ var World = {
 };
 
 AR.context.onLocationChanged = World.locationChanged;
-AR.context.scene.minScalingDistance = 10;
-AR.context.scene.maxScalingDistance = 2000;
-AR.context.scene.scalingFactor = 0.2;
+AR.context.scene.minScalingDistance = 20;
+AR.context.scene.maxScalingDistance = 20000;
+AR.context.scene.scalingFactor = 0.1;
 AR.context.onScreenClick = World.onScreenClick;

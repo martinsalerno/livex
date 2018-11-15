@@ -119,6 +119,10 @@ var World = {
                 cam: [buyTicketsButton, video, slideshow],
             },
                 onImageRecognized: function onImageRecognizedFn() {
+                    var markerSelectedJSON2 = {
+                           name: "imagenDetectada"
+                        };
+                    AR.platform.sendJSONObject(markerSelectedJSON2);
                     if (this.hasVideoStarted) {
                         video.resume();
                     }
@@ -148,6 +152,10 @@ var World = {
                            id: "5b9ae620c399fb6a8e4eaade"
                         };
                         AR.platform.sendJSONObject(markerSelectedJSON);
+                        var markerSelectedJSON2 = {
+                           name: "imagenDetectada"
+                        };
+                        AR.platform.sendJSONObject(markerSelectedJSON2);
                     }
                     else {
                         this.hasVideoStarted = true;

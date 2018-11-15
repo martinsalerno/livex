@@ -36,8 +36,8 @@ var World = {
 			World.markerList.push(marker);
 			marker.setSelected(marker);
 		}
-
 		World.updateStatusMessage(poiData[0].name);
+		PoiRadar.show();
 	},
 
     loadPois: function loadPoisFn(poi) {

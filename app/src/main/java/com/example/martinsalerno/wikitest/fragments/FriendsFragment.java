@@ -63,6 +63,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
         recyclerFriends.setVisibility(View.INVISIBLE);
         temporaryText.setVisibility(View.GONE);
         new RequestHandler().loadUsers(this, searchFriends.getText().toString());
+        searchFriends.clearFocus();
     }
 
     public void showRecycler() {

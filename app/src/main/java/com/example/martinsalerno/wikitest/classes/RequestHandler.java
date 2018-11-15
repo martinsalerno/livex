@@ -83,6 +83,10 @@ public class RequestHandler {
                         activity.loginFailed();
                     }
                 });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
     }
 
@@ -125,7 +129,7 @@ public class RequestHandler {
 
     public void loadEventsProfile(final ProfileFragment fragment) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                (Request.Method.GET, EVENTS_URL, null, new Response.Listener<JSONArray>() {
+                (Request.Method.GET, USERS_URL + new SessionHandler(fragment.getContext()).getId() + "/espectaculos", null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Event[] eventos = mapper.fromJson(response.toString(), Event[].class);
@@ -176,8 +180,8 @@ public class RequestHandler {
         LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void addEvent(final Activity activity, String eventId) {
-        String path = USERS_URL + new SessionHandler(activity).getId() + "/espectaculos/" + eventId;
+    public void addEvent(final Context context, String eventId) {
+        String path = USERS_URL + new SessionHandler(context).getId() + "/espectaculos/" + eventId;
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
                 (com.android.volley.Request.Method.POST, path, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -192,13 +196,13 @@ public class RequestHandler {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Bearer " + new SessionHandler(activity).getToken());
+                headers.put("Authorization", "Bearer " + new SessionHandler(context).getToken());
                 return headers;
 
             }
         };
 
-        LivexExchange.getInstance(activity).addToRequestQueue(jsonObjectRequest);
+        LivexExchange.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
     public void loadPosts(String partialPath, final PostsFragmentInterface fragment) {
@@ -389,11 +393,27 @@ public class RequestHandler {
         RequestOptions myOptions = new RequestOptions()
                 .centerCrop()
                 .override(200, 200)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .timeout(5000)
                 .placeholder(R.drawable.background_profile_1)
                 .error(R.drawable.background_profile_1);
 
         Glide.with(fragment).load(glideUrl).apply(myOptions).into(imageView);
+    }
+
+    public void loadProfileImageAsync(Context context, ImageView imageView, String userId) {
+        GlideUrl glideUrl = new GlideUrl(USERS_URL + userId + "/profilePicture", new LazyHeaders.Builder()
+                .addHeader("Authorization", "Bearer " + new SessionHandler(context).getToken())
+                .build());
+        RequestOptions myOptions = new RequestOptions()
+                .centerCrop()
+                .override(70, 80)
+                .timeout(5000)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.background_profile_1)
+                .error(R.drawable.background_profile_1);
+
+        Glide.with(context).load(glideUrl).apply(myOptions).into(imageView);
     }
 
     public Bitmap loadSmallProfileImage(Activity activity, ImageView imageView, String userId) {
@@ -485,9 +505,13 @@ public class RequestHandler {
         GlideUrl glideUrl = new GlideUrl(EVENTS_URL + eventId + "/imagen", new LazyHeaders.Builder()
                 .addHeader("Authorization", "Bearer " + new SessionHandler(activity).getToken())
                 .build());
-        Glide.with(activity).load(glideUrl).apply(new RequestOptions()
+        RequestOptions myOptions = new RequestOptions()
+                .centerCrop()
+                .timeout(10000)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.placeholder)
-                .error(R.drawable.image_not_available)).into(imageView);
+                .error(R.drawable.image_not_available);
+        Glide.with(activity).load(glideUrl).apply(myOptions).into(imageView);
     }
 
     public Bitmap loadEventImage(Activity activity, String eventId) {
@@ -512,14 +536,14 @@ public class RequestHandler {
         String requestURL = POSTS_IMAGES_URL + postId;
         OkHttpClient client = new OkHttpClient()
                 .newBuilder()
-                .readTimeout(1000, TimeUnit.SECONDS)
-                .writeTimeout(1000, TimeUnit.SECONDS)
+                .readTimeout(30000, TimeUnit.SECONDS)
+                .writeTimeout(30000, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false)
                 .build();
         File file = new File(activity.getCacheDir(), postId);
         file.createNewFile();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 40 , bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30 , bos);
         byte[] bitmapdata = bos.toByteArray();
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(bitmapdata);
@@ -535,6 +559,39 @@ public class RequestHandler {
                     .addHeader("Authorization", "Bearer " + new SessionHandler(activity).getToken())
                     .put(requestBody)
                     .build();
+
+        okhttp3.Response response = client.newCall(request).execute();
+        System.out.println(response.body().string());
+
+    }
+
+    public void uploadImageUser(ProfileFragment fragment, String userId, Bitmap bitmap) throws IOException {
+        String requestURL = USERS_URL + userId + "/profilePicture";
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .readTimeout(3000, TimeUnit.SECONDS)
+                .writeTimeout(3000, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
+                .build();
+        File file = new File(fragment.getActivity().getCacheDir(), userId);
+        file.createNewFile();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40 , bos);
+        byte[] bitmapdata = bos.toByteArray();
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(bitmapdata);
+        fos.flush();
+        fos.close();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", userId, RequestBody.create(MediaType.parse("image/jpeg"), file))
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(requestURL)
+                .addHeader("Authorization", "Bearer " + new SessionHandler(fragment.getActivity()).getToken())
+                .put(requestBody)
+                .build();
 
         okhttp3.Response response = client.newCall(request).execute();
         System.out.println(response.body().string());

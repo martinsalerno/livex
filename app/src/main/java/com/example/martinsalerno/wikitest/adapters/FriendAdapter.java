@@ -123,7 +123,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                     this.nextStatus = 2;
                     addFriend.setBackgroundColor(context.getResources().getColor(R.color.colorButtomDisabled));
             }
-            new LoadFriendTask(context, itemView).execute(friend.getId(), friend.getUsername());
+            new RequestHandler().loadProfileImageAsync(itemView.getContext(), friendImage, friendId);
+            friendName.setText(username);
             if (this.username.equals(new SessionHandler(context).getUsername())) {
                 addFriend.setText("Amigos");
                 locateFriend.setVisibility(View.VISIBLE);

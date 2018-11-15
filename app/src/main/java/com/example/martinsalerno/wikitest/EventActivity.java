@@ -1,9 +1,11 @@
 package com.example.martinsalerno.wikitest;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +52,7 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
     private RecyclerView recyclerPosts;
     private ProgressBar progressBar;
     private TextView placeName;
+    private TextView eventName;
     private TextView placeAddress;
     private TextView showsNumber;
     private TextView commerceNumber;
@@ -70,13 +73,9 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
         commerceNumber = findViewById(R.id.commercesNumber);
         placeName = findViewById(R.id.placeName);
         placeAddress = findViewById(R.id.placeAddress);
+        eventName = findViewById(R.id.eventName);
         buttonLocate = findViewById(R.id.locateCommerces);
-        buttonLocate.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startLocation();
-            }
-        });
+        buttonTickets = findViewById(R.id.ticketsButton);
         recyclerPosts = findViewById(R.id.recyclerCompletePostsEvent);
         recyclerPosts.setVisibility(View.INVISIBLE);
         recyclerPosts.setHasFixedSize(true);
@@ -85,6 +84,13 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
 
         recyclerShows = findViewById(R.id.recyclerShows);
         recyclerShows.setLayoutManager(new GridLayoutManager(this, 2));
+
+        buttonLocate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startLocation();
+            }
+        });
 
         recyclerCommerces = findViewById(R.id.recyclerComercios);
         recyclerCommerces.setLayoutManager(new GridLayoutManager(this, 2));
@@ -95,10 +101,25 @@ public class EventActivity extends AppCompatActivity implements PostsFragmentInt
     public void loadEvent(){
         Gson gson = new Gson();
         event = gson.fromJson(getIntent().getStringExtra("event"), Event.class);
+        eventName.setText(event.getNombre());
         loadEventImg();
         loadPlace();
         loadShows();
         loadCommerces();
+        buttonTickets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(event.getLinkCompra()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    intent.setPackage(null);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     public void loadEventImg(){

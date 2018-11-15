@@ -96,8 +96,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolderEv
                 eventPresence.setTextColor(context.getResources().getColor(R.color.colorPresencerED));
                 setTextViewDrawableColor(eventPresence, R.color.colorPresencerED);
             }
-            eventArtists.setText(Integer.toString(event.getFunciones().size()) + " artistas");
-            eventCommerces.setText(Integer.toString(event.getComercios().size()) + " comercios");
+            if (event.getFunciones() == null) {
+                eventArtists.setText("0 artistas");
+            } else {
+                eventArtists.setText(Integer.toString(event.getFunciones().size()) + " artistas");
+            }
+            if (event.getFunciones() == null) {
+                eventCommerces.setText("0 comercios");
+            } else {
+                eventCommerces.setText(Integer.toString(event.getComercios().size()) + " comercios");
+            }
             new RequestHandler().loadEventImageSync(context, eventImg, event.getId());
         }
 

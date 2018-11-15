@@ -1,19 +1,28 @@
 package com.example.martinsalerno.wikitest.fragments;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.martinsalerno.wikitest.PostActivity;
 import com.example.martinsalerno.wikitest.R;
 import com.example.martinsalerno.wikitest.adapters.CompletePostAdapter;
 import com.example.martinsalerno.wikitest.adapters.EventAdapter;
@@ -23,6 +32,10 @@ import com.example.martinsalerno.wikitest.classes.Post;
 import com.example.martinsalerno.wikitest.classes.RequestHandler;
 import com.example.martinsalerno.wikitest.classes.SessionHandler;
 import com.example.martinsalerno.wikitest.interfaces.PostsFragmentInterface;
+import com.example.martinsalerno.wikitest.tasks.SavePostTask;
+import com.example.martinsalerno.wikitest.tasks.SavePostTaskProfile;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.w3c.dom.Text;
 
@@ -39,6 +52,7 @@ public class ProfileFragment extends Fragment implements PostsFragmentInterface 
     private TextView missingPost;
     private RecyclerView recyclerPosts;
     private ProgressBar progressBar;
+    private static final int GALLERY_INTENT_CODE = 1;
 
     public ProfileFragment() { }
 
@@ -51,6 +65,12 @@ public class ProfileFragment extends Fragment implements PostsFragmentInterface 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         profilePic = view.findViewById(R.id.userImage);
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToLoadPhoto();
+            }
+        });
         backgroundPic = view.findViewById(R.id.profileBackground);
         username = view.findViewById(R.id.userName);
         postsNumber = view.findViewById(R.id.publicacionesNumber);
@@ -125,6 +145,39 @@ public class ProfileFragment extends Fragment implements PostsFragmentInterface 
     }
 
     public void setFriends(Friend[] friends) {
-        friendsNumber.setText(Integer.toString(friends.length));
+        friendsNumber.setText(Integer.toString(friends.length ));
+    }
+
+    private void sendToLoadPhoto(){
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent, GALLERY_INTENT_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == GALLERY_INTENT_CODE) {
+                Uri picUri = data.getData();
+                new SavePostTaskProfile(this).execute(picUri.toString());
+            }
+        }
+    }
+
+    public void notifyImagePostFinished() {
+        Toast.makeText(getContext(), "Imagen subida", Toast.LENGTH_LONG).show();
+        loadProfileImage();
     }
 }
